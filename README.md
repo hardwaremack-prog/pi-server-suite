@@ -5,7 +5,7 @@ Everything you need to run a Raspberry Pi 5 or Pi 500 as a home server, in one p
 (and whether other devices can reach it) with a **Stop** button for each, plus a light for every
 suite app and a plain-English **Server check-up** that tells you what to fix first.
 
-![Server Room](thumbs/server-room.jpg)
+![Server Room](screenshots/server-room.png)
 
 ## The apps
 
@@ -29,6 +29,49 @@ suite app and a plain-English **Server check-up** that tells you what to fix fir
 | 🎙️ | **Pip** | Offline voice assistant for a headset - no internet needed. |
 | ✂️ | **PiSnip** | Snipping Tool: screenshots, markup and screen recording. |
 | 🗄️ | **The Shelf** | Home-network hub (installs separately: [the-shelf](https://github.com/hardwaremack-prog/the-shelf)). |
+
+## Screenshots
+
+### Running servers
+Every web server on the Pi, with **network** (orange: phones and PCs can open it) or **this Pi**. Stop asks "Sure?" first and warns about anything important.
+
+![Running servers](screenshots/running-servers.png)
+![Stop asks first](screenshots/running-servers-stop.png)
+
+### Server check-up
+Only the things to fix, worst first, each with what it means and a command to copy.
+
+![Server check-up](screenshots/server-checkup.png)
+
+<details><summary>Every check</summary>
+
+![All checks](screenshots/server-checkup-all.png)
+</details>
+
+### On your phone
+<img src="screenshots/server-room-phone.png" width="300" alt="Server Room on a phone">
+
+### In My Apps (Server Suite tab)
+![My Apps Server Suite tab](screenshots/my-apps-server-suite.png)
+
+### Tidy Suite, hosted by the Pi
+Everyone on the Wi-Fi opens `http://<the Pi>:8780`; the green dot by their name means their work is saved on the Pi.
+
+![Tidy Suite on the Pi](screenshots/tidy-suite-on-pi.png)
+
+### Pironman Pilot (Pironman 5 MAX case)
+| | |
+|---|---|
+| ![Overview](screenshots/pilot-overview.png) | ![Fans](screenshots/pilot-fans.png) |
+| ![Lights](screenshots/pilot-lights.png) | ![OLED pages](screenshots/pilot-oled.png) |
+| ![Side-fan speed curve](screenshots/pilot-side-fans.png) | ![Overclock](screenshots/pilot-overclock.png) |
+
+### VNC Turbo and PiStartup
+| VNC Turbo | PiStartup |
+|---|---|
+| ![VNC Turbo](screenshots/vnc-turbo.png) | ![PiStartup](screenshots/pistartup.png) |
+
+The screenshots use Server Room's demo mode and sample readings (`python3 server-suite/server-room.py --demo --open`).
 
 ## What the check-up looks at
 
