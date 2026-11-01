@@ -23,6 +23,7 @@ suite app and a plain-English **Server check-up** that tells you what to fix fir
 | 📘 | **Blueprint Wiki** | Document your server: pages, checklists, PDFs, network maps. |
 | 🔐 | **Latch** | Offline password safe for your server, router and container passwords. |
 | 🚀 | **PiStartup** | Everything that starts with the Pi, with boot times; switch off what a server doesn't need. |
+| 🔊 | **PiPortal** | The Pi's desktop *with sound* in any browser (VNC has none), plus stats, processes, services, terminal and files. Run the server with no monitor. Port 6090. Also on its own: [piportal](https://github.com/hardwaremack-prog/piportal) |
 | ⚡ | **VNC Turbo** | Makes remote desktop fast again: finds the cause and fixes it with one click, all undoable. |
 | 🌀 | **Pironman Pilot** | Only on a Pi 5 in a SunFounder Pironman 5 MAX case: OLED, quiet fan curves, side-fan speed control, lights, safe overclocking. |
 | 🗂️ | **Tidy Suite** | Hosts the whole Tidy Suite for everyone on your Wi-Fi (port 8780); each person's work is saved on the Pi. |
@@ -65,6 +66,11 @@ Everyone on the Wi-Fi opens `http://<the Pi>:8780`; the green dot by their name 
 | ![Overview](screenshots/pilot-overview.png) | ![Fans](screenshots/pilot-fans.png) |
 | ![Lights](screenshots/pilot-lights.png) | ![OLED pages](screenshots/pilot-oled.png) |
 | ![Side-fan speed curve](screenshots/pilot-side-fans.png) | ![Overclock](screenshots/pilot-overclock.png) |
+
+### PiPortal
+The Pi's desktop and its sound in a browser tab, with the level meter lit while it plays.
+
+![PiPortal](screenshots/piportal.png)
 
 ### VNC Turbo and PiStartup
 | VNC Turbo | PiStartup |
