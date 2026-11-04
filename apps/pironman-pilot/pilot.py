@@ -440,10 +440,27 @@ def validate_oc(body):
 RUNNING = {"arm": None, "gpu": None, "ovd": None}
 
 
+def _clock_mhz(name):
+    m = re.search(r"=(\d+)", vc("measure_clock", name))
+    return round(int(m.group(1)) / 1e6) if m else None
+
+
 def refresh_running():
     RUNNING["arm"] = get_config("arm_freq")
-    RUNNING["gpu"] = get_config("gpu_freq")
     RUNNING["ovd"] = get_config("over_voltage_delta")
+    # On a Pi 5 "get_config gpu_freq" doesn't return a frequency, so use what Pilot wrote to
+    # config.txt (910 = stock when the overclock block has no gpu_freq line), else the live V3D clock.
+    gpu = None
+    try:
+        oc = parse_oc_block(read(CONFIG_TXT, "") or "")
+        if oc:
+            gpu = oc.get("gpu")
+    except Exception:
+        gpu = None
+    if not gpu or gpu < 100:
+        g = get_config("gpu_freq")
+        gpu = g if g and g >= 100 else (_clock_mhz("v3d") or None)
+    RUNNING["gpu"] = gpu
 
 
 def check_pending():
@@ -517,15 +534,40 @@ def mem():
             "pct": round(100 * (total - avail) / total, 1) if total else None}
 
 
+# Interfaces never worth showing: containers, VMs, VPN/tunnels (e.g. the iPhone tether's tun)
+SKIP_IFACE_PREFIXES = ("lo", "docker", "br-", "veth", "virbr", "podman", "cni", "lxc", "lxd",
+                       "tun", "tap", "wg", "tailscale", "utun", "dummy")
+
+
+def all_ips():
+    """{iface: ipv4} for every interface with an IPv4 address, in kernel order."""
+    out = {}
+    rc, txt = run(["ip", "-4", "-o", "addr", "show"], 5)
+    for ln in (txt or "").splitlines():
+        m = re.match(r"\d+:\s+(\S+)\s+inet\s+(\d+\.\d+\.\d+\.\d+)", ln)
+        if m and m.group(1) not in out:
+            out[m.group(1)] = m.group(2)
+    return out
+
+
 def local_ip():
+    """The address to show on the screen: the chosen interface, else Wi-Fi/hotspot, else Ethernet,
+    else any real (non-virtual, non-tunnel) one. Tunnel ranges like 198.18.0.0/15 are skipped."""
     try:
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("10.255.255.255", 1))
-        ip = s.getsockname()[0]
-        s.close()
-        return ip
+        ips = all_ips()
+        want = (SET.get("ip_iface") or "auto").strip()
+        if want and want != "auto" and ips.get(want):
+            return ips[want]
+        for name in ("wlan0", "eth0"):
+            if ips.get(name):
+                return ips[name]
+        for name, ip in ips.items():
+            if name.startswith(SKIP_IFACE_PREFIXES) or ip.startswith(("198.18.", "198.19.", "169.254.")):
+                continue
+            return ip
     except Exception:
-        return "no network"
+        pass
+    return "no network"
 
 
 def push(key, val):
